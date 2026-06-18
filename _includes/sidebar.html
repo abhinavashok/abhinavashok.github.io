@@ -1,15 +1,57 @@
-{% assign postsByYear = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
-
-{% for year in postsByYear %}
-  <div class="year-group">
-    <div class="year-label">▾ {{ year.name }}</div>
-
-    {% assign postsByMonth = year.items | group_by_exp: "p", "p.date | date: '%B'" %}
-    {% for month in postsByMonth %}
-      <a href="/archive/{{ year.name }}/{{ month.name | downcase }}/" class="month-item">
-        {{ month.name }}
-        <span class="count">{{ month.items | size }}</span>
-      </a>
+<!-- Archive section -->
+<div class="sidebar-section">
+  <button class="section-header" aria-expanded="true" data-target="archive">
+    <span>Archive</span>
+    <span class="chevron">›</span>
+  </button>
+  <div class="section-body open" id="archive">
+    {% assign postsByYear = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
+    {% for year in postsByYear %}
+    <div class="year-group">
+      <button class="year-toggle" aria-expanded="true" data-target="year-{{ year.name }}">
+        <span>{{ year.name }}</span>
+        <span class="chevron">›</span>
+      </button>
+      <div class="month-list open" id="year-{{ year.name }}">
+        {% assign postsByMonth = year.items | group_by_exp: "p", "p.date | date: '%m'" %}
+        {% for month in postsByMonth %}
+        {% assign month_name = month.items.first.date | date: "%B" %}
+        {% assign month_url  = month.items.first.date | date: "/%Y/%m/" %}
+        <a href="/archive{{ month_url }}"
+           class="month-item{% if page.url == '/archive' | append: month_url %} active{% endif %}">
+          <span>{{ month_name }}</span>
+          <span class="count">{{ month.items | size }}</span>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
     {% endfor %}
   </div>
+</div>
+
+<!-- Labels section -->
+{% assign all_labels = "" %}
+{% for post in site.posts %}
+  {% for label in post.labels %}
+    {% unless all_labels contains label %}
+      {% assign all_labels = all_labels | append: label | append: "||" %}
+    {% endunless %}
+  {% endfor %}
 {% endfor %}
+
+{% assign label_list = all_labels | split: "||" | uniq | sort %}
+{% if label_list.size > 0 %}
+<div class="sidebar-section">
+  <button class="section-header" aria-expanded="true" data-target="labels">
+    <span>Labels</span>
+    <span class="chevron">›</span>
+  </button>
+  <div class="section-body open" id="labels">
+    {% for label in label_list %}
+      {% if label != "" %}
+        <a href="/label/{{ label | slugify }}/" class="label-pill">{{ label }}</a>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

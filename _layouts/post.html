@@ -1,0 +1,40 @@
+---
+layout: default
+---
+
+<article class="post">
+
+  <header class="post-header">
+    <div class="post-eyebrow">
+      <time class="post-date" datetime="{{ page.date | date_to_xmlschema }}">
+        {{ page.date | date: "%B %d, %Y" }}
+      </time>
+      {% if page.labels %}
+        <span class="dot">·</span>
+        {% assign words = content | number_of_words %}
+        <span class="read-time">{{ words | divided_by: 200 | plus: 1 }} min read</span>
+      {% endif %}
+    </div>
+
+    <h1 class="post-title">{{ page.title }}</h1>
+
+    {% if page.labels %}
+      <div class="post-labels">
+        {% for label in page.labels %}
+          <a href="/label/{{ label | slugify }}/" class="label label-{{ label | slugify }}">
+            {{ label }}
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+
+  <footer class="post-footer">
+    <a href="{{ '/' | relative_url }}" class="back-link">← All posts</a>
+  </footer>
+
+</article>

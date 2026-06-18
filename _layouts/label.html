@@ -1,0 +1,30 @@
+---
+layout: default
+---
+
+<div class="label-page">
+  <div class="label-page-header">
+    <a href="{{ '/' | relative_url }}" class="back-link">← All posts</a>
+    <h1 class="label-page-title">
+      <span class="label label-{{ page.label | slugify }}">{{ page.label }}</span>
+    </h1>
+    <p class="label-count">{{ page.posts.size }} post{% if page.posts.size != 1 %}s{% endif %}</p>
+  </div>
+
+  <div class="post-list">
+    {% for post in page.posts %}
+    <article class="post-card">
+      <div class="post-card-meta">
+        <time class="post-date">{{ post.date | date: "%B %d, %Y" }}</time>
+        {% for label in post.labels %}
+          <a href="/label/{{ label | slugify }}/" class="label label-{{ label | slugify }}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <h2 class="post-card-title">
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </h2>
+      <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</div>

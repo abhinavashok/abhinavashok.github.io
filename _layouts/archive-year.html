@@ -1,0 +1,34 @@
+---
+layout: default
+---
+
+<div class="archive-page">
+  <div class="archive-header">
+    <a href="{{ '/' | relative_url }}" class="back-link">← All posts</a>
+    <h1 class="archive-title">{{ page.title }}</h1>
+    <p class="archive-count">{{ page.posts.size }} post{% if page.posts.size != 1 %}s{% endif %}</p>
+  </div>
+
+  {% assign postsByMonth = page.posts | group_by_exp: "p", "p.date | date: '%B %Y'" %}
+  {% for month in postsByMonth %}
+  <div class="archive-month-group">
+    <h2 class="archive-month-heading">{{ month.name }}</h2>
+    <div class="post-list">
+      {% for post in month.items %}
+      <article class="post-card">
+        <div class="post-card-meta">
+          <time class="post-date">{{ post.date | date: "%B %d, %Y" }}</time>
+          {% for label in post.labels %}
+            <a href="/label/{{ label | slugify }}/" class="label label-{{ label | slugify }}">{{ label }}</a>
+          {% endfor %}
+        </div>
+        <h2 class="post-card-title">
+          <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+        </h2>
+        <p class="post-card-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
