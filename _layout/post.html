@@ -1,0 +1,3 @@
+{% for label in page.labels %}
+  <span class="label label-{{ label | slugify }}">{{ label }}</span>
+{% endfor %}
