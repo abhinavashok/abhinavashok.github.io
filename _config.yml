@@ -47,6 +47,8 @@ jekyll-archives:
     year: /archive/:year/
     month: /archive/:year/:month/
 
+future: true
+
 plugins:
   - jekyll-feed
   - jekyll-sitemap
